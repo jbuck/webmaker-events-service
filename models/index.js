@@ -30,11 +30,15 @@ module.exports = function(options) {
   }
 
   // Import models
+  var Attendee = sequelize.import(__dirname + '/attendee.js');
   var Event = sequelize.import(__dirname + '/event.js');
   var Tag = sequelize.import(__dirname + '/tag.js');
 
   Event.hasMany(Tag);
   Tag.hasMany(Event);
+
+  Event.hasMany(Attendee);
+  Attendee.belongsTo(Event);
 
   // Sync
   sequelize.sync().complete(function (err) {
@@ -47,6 +51,7 @@ module.exports = function(options) {
 
   // Export models
   return {
+    attendee: Attendee,
     event: Event,
     tag: Tag
   };
